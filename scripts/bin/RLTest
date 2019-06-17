@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export PYTHONPATH=/w/dev1/RLTest:/w/dev1/readies
+python -m RLTest "$@"
+

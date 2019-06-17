@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $REDEV_ROOT/RLTest
+pipenv shell
