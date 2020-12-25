@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mod=$1
+[[ -z $mod ]] && mod=$(basename $(pwd))
+for v in 1 2 3 4 5; do
+	d=/w/rafi_$v/$mod
+	if [[ -d $d ]]; then
+		cd $d
+		echo "$d:"
+		git branch
+	fi
+done

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+v=$(pwv --root)
+if [[ -z $v ]]; then
+	echo "Not in view"
+	exit 1
+fi
+cd $v
+for d in *; do
+	if [[ -d $d/.git ]]; then
+		cd $d
+		echo "$d: $(git branch | grep \* | cut -d ' ' -f2)"
+		cd ..
+	fi
+done
+

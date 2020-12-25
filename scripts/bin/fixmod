@@ -1,0 +1,7 @@
+#!/bin/bash
+
+[[ -z $* ]] && exit 1
+find $* -type d -printf "'%p' " | xargs chmod 775
+find $* -type f -not -executable -printf "'%p' " | xargs chmod 664
+find $* -type f -executable -printf "'%p' " | xargs chmod 775
+

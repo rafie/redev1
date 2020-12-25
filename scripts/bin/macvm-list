@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+ROOT=$(cd $HERE/../../..; pwd)
+READIES=$ROOT/readies
+. $READIES/shibumi/defs
+
+DIR=/n/vmware-fusion
+
+cd $DIR
+if [[ $X == 1 ]]; then
+	for VMD in `ls -d1 *.vmwarevm`; do
+		NAME=`echo "$VMD"  | sed -e 's/\.vmwarevm//'`
+		SIZE=`du -sh $VMD | awk '{print $1}'`
+		# FROM=`macvm-vmx $NAME fileSearchPath | cut -f2 -d\;`
+		echo "$NAME $SIZE"
+	done | column -t
+else
+	ls -d1 *.vmwarevm | sed -e 's/\.vmwarevm//'
+fi

@@ -1,0 +1,68 @@
+
+gears:
+	github: RedisGears/RedisGears
+
+ts:
+	github: RedisTimeSeries/RedisTimeSeries
+
+ai:
+	github: RedisAI/RedisAI
+
+edge:
+	github: RedisLabs/RedisEdge
+
+graph:
+	github: RedisGraph/RedisGraph
+
+search:
+	github: RediSearch/RediSearch
+
+json:
+	github: RedisJSON/RedisJSON
+
+bloom:
+	github: RedisBloom/RedisBloom
+
+ts-prom:
+	github: RedisTimeSeries/prometheus-redistimeseries-adapter
+
+rs-coord:
+	github: RedisLabsModules/RSCoordinator
+
+cats:
+	github: RedisGears/AnimalRecognitionDemo
+
+yolo:
+	github: RedisGears/EdgeRealtimeVideoAnalytics
+
+redis-docker:
+	github: RedisLabsModules/redis-docker
+re-misc:
+	github: RedisLabsModules/modullaneous
+
+armx:
+	github: RedisLabsModules/arm-xbuild
+
+readies:
+	github: RedisLabsModules/readies
+
+rmbuild:
+	github: RedisLabsModules/ModuleBuildDocker
+
+rltest:
+	github: RedisLabsModules/RLTest
+
+redis:
+	github: antirez/redis
+
+sdk:
+	github: RedisLabs/RedisModulesSDK
+
+ramp:
+	github: RedisLabs/RAMP
+
+rlec:
+	github: redislabsdev/Redis-Enterprise
+
+recalc:
+	github: RedisLabs/recalc

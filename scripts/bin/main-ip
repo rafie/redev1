@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	if=$(route -n get 8.8.8.8|grep interface| awk '{print $2}')
+	ifconfig $if|grep inet|grep netmask|awk '{print $2}'
+else
+	ip route get 8.8.8.8 | head -1 | awk '{print $7}'
+fi
+

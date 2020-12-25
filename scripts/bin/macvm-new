@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -e
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+ROOT=$(cd $HERE/../../..; pwd)
+READIES=$ROOT/readies
+. $READIES/shibumi/defs
+
+# NAME, FROM, TAG
+# NAME=newvm FROM=macos-10.14 TAG=v2 macvm-new
+# or: macvm-new newvm macos-10.14 v2
+
+if [[ ! -z $1 ]]; then
+	NAME="$1"
+	shift
+fi
+
+if [[ -z $NAME ]]; then
+	eprint "No VM NAME given. Aborting."
+	exit 1
+fi
+
+if [[ ! -z $1 ]]; then
+	FROM="$1"
+	shift
+fi
+
+if [[ -z $FROM ]]; then
+	eprint "No FROM vm template name given. Aborting."
+	exit 1
+fi
+
+if [[ ! -z $1 ]]; then
+	TAG="$1"
+	shift
+fi
+
+if [[ -z $TAG ]]; then
+	eprint "No TAG given. Aborting."
+	exit 1
+fi
+
+DIR=/n/vmware-fusion
+VTDIR=$DIR/${FROM}.vmwarevm
+VTX=$VTDIR/${FROM}.vmx
+
+VTNAME=`macvm-vmx $FROM displayName`
+if [[ ${VTNAME:0:1} != "~" ]]; then
+	eprint "$FROM is not a template."
+	exit 1
+fi
+
+exit 0
+
+VMDIR=$DIR/${NAME}.vmwarevm
+VMX=$VMDIR/${NAME}.vmx
+mkdir -p $VMDIR
+if [[ -f $VMX ]]; then
+	echo "$NAME already exist. Aborting."
+	exit 1
+fi
+vmrun clone $VTX $VMX linked -snapshot=$TAG -cloneName=$NAME
+vmrun snapshot $VMX v0
+vmrun start $VMX
+IP=`vmrun getGuestIPAddress $VMX -wait`

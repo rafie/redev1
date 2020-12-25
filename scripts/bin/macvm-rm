@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+ROOT=$(cd $HERE/../../..; pwd)
+READIES=$ROOT/readies
+. $READIES/shibumi/defs
+
+if [[ ! -z $1 ]]; then
+	NAME="$1"
+fi
+
+if [[ -z $NAME ]]; then
+	eprint "No VM name given. Aborting."
+	exit 1
+fi
+
+DIR=/n/vmware-fusion
+VMDIR=$DIR/$NAME.vmwarevm
+VMX=${VMDIR}/${NAME}.vmx
+
+if [[ ! -d $VMDIR && ! -f $VMX ]]; then
+	print "No VM $NAME found. Aborting."
+	exit 1
+fi

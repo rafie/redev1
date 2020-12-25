@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+ROOT=$(cd $HERE/../../..; pwd)
+READIES=$ROOT/readies
+. $READIES/shibumi/defs
+
+DIR=/n/vmware-fusion
+VMDIR=$DIR/$NAME.vmwarevm
+
+# vmrun list | tail -n+2 | xargs -L1 dirname | xargs -L1 basename | cut -f1 -d.
+
+for VMX in `vmrun list | tail -n+2 | sort`; do
+	NAME=`dirname $VMX | xargs basename | cut -f1 -d.`
+	if [[ $NOIP != 1 ]]; then
+		ip=`vmrun getGuestIPAddress $VMX`
+		echo "$NAME $ip"
+	else
+		echo "$NAME"
+	fi
+done

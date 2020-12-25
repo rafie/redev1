@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DIR=$1
+DIR=${DIR:-.}
+find $DIR -type f -exec ls -l {} \; | gawk '{print $1 " " $9 }' | grep -- '-rw-'
+

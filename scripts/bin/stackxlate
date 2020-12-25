@@ -1,0 +1,42 @@
+#!/bin/bash
+# reads input from stdin (either terminal or pipe),
+# usage: stack_translate.sh  # and paste stack lines
+#        stack_translate.sh < stack.txt
+#        stack_translate.sh <prefix_path>  # base path to use if referenced file isn't found
+# lines such as:
+#     /home/oran/work/RedisLabs/git/crdt/build/4.0/.libs/crdt.so(+0x15f48)[0x7fe8b35baf48]
+#     /home/oran/work/RedisLabs/git/crdt/build/4.0/redis-server - *:12001(processCommand+0x4c5)[0x42b165]
+
+function ctrl_c() {
+    echo "exiting.."
+    stty $stty_orig
+	exit
+}
+
+if [ -t 0 ] ; then # check if stdout is a terminal, and eliminate local echo
+  echo "paste your stack trace to the terminal and then Ctrl+C"
+  stty_orig=`stty -g`
+  stty -echo
+  trap ctrl_c INT
+fi
+prefix_path=${1:-$PWD}
+while read line
+do
+  IFS='()[]' read -ra var_result <<< "$line"
+  module=${var_result[0]}
+  address=${var_result[1]}
+  IFS=' ' read -ra module <<< "$module"
+  if [ ! -f "$module" ]; then
+    module="$prefix_path/$module"
+  fi
+  # addr2line -e $module $reladdress -f -p
+  info=`gdb -s $module -ex "list *$address" -batch -q 2>&1 |head -n1`
+  if [[ $info == 0x* ]] ; then
+    echo $info
+  else
+    echo $line
+  fi
+done < "/dev/stdin"
+if [ -t 0 ] ; then
+  stty $stty_orig
+fi
